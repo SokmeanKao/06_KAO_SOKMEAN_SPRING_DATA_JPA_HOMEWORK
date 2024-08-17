@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: spring-data-jpa-homework
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/spring_data_jpa_hw_db
+    username: postgres
+    password: asd
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
