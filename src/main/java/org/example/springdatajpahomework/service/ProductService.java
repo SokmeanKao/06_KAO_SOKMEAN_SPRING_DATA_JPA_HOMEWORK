@@ -6,7 +6,7 @@ import org.example.springdatajpahomework.model.dto.response.ProductResponse;
 import java.util.List;
 
 public interface ProductService {
-    List<ProductResponse> getAllProducts();
+    List<ProductResponse> getAllProducts(Integer pageNo, Integer pageSize, String sortBy, String sortDirection);
 
     ProductResponse createProduct(ProductRequest productRequest);
 

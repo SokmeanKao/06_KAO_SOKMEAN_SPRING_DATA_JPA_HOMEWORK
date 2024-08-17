@@ -6,6 +6,9 @@ import org.example.springdatajpahomework.model.dto.response.ProductResponse;
 import org.example.springdatajpahomework.model.entity.Product;
 import org.example.springdatajpahomework.repository.ProductRepository;
 import org.example.springdatajpahomework.service.ProductService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +19,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<ProductResponse> getAllProducts() {
-        return productRepository.findAll().stream().map(Product::toResponse).toList();
+    public List<ProductResponse> getAllProducts(Integer pageNo, Integer pageSize, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        return productRepository.findAll(pageable).stream().map(Product::toResponse).toList();
     }
 
     @Override

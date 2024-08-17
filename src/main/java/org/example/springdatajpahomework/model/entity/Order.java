@@ -31,12 +31,12 @@ public class Order {
     private Float totalAmount;
     private Status status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductOrder> productOrder;
-
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductOrder> productOrder;
 
 
     public OrderResponse toResponse() {

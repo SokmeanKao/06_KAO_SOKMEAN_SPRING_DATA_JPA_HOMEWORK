@@ -27,32 +27,41 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
 
-    @Override
-    public OrderResponse createOrder(Long customerId, List<OrderRequest> orderRequests) {
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new EntityNotFoundException("Customer not found"));
-
-        List<ProductOrder> productOrders = orderRequests.stream()
+    private List<ProductOrder> createProductOrders(List<OrderRequest> orderRequests) {
+        return orderRequests.stream()
                 .map(request -> {
                     Product product = productRepository.findById(request.getProductId())
                             .orElseThrow(() -> new EntityNotFoundException("Product not found"));
                     return new ProductOrder(null, product, null, request.getQuantity());
                 }).collect(Collectors.toList());
+    }
 
-        Float totalAmount = (float) productOrders.stream()
+    private Float calculateTotalAmount(List<ProductOrder> productOrders) {
+        return (float) productOrders.stream()
                 .mapToDouble(po -> po.getProduct().getUnitPrice() * po.getQuantity())
                 .sum();
-
-        Order orders = new Order(null, LocalDateTime.now(), totalAmount, Status.PENDING, productOrders, customer);
-        productOrders.forEach(po -> po.setOrder(orders));
-        Order savedOrder = orderRepository.save(orders);
-        return savedOrder.toResponse();
     }
+
+    @Override
+    public OrderResponse createOrder(Long customerId, List<OrderRequest> orderRequests) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found!"));
+
+        List<ProductOrder> productOrders = createProductOrders(orderRequests);
+
+        Float totalAmount = calculateTotalAmount(productOrders);
+
+        Order order = new Order(null, LocalDateTime.now(), totalAmount, Status.PENDING, customer, productOrders);
+        productOrders.forEach(po -> po.setOrder(order));
+
+        return orderRepository.save(order).toResponse();
+    }
+
 
     @Override
     public List<OrderResponse> getOrderByCustomerId(Long customerId) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Customer not found!"));
 
         List<Order> orders = customer.getOrder();
 
@@ -63,12 +72,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse getOrderByOrderId(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(null).toResponse();
+        return orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order not found!")).toResponse();
     }
 
     @Override
     public OrderResponse updateOrderStatus(Status status, Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(null);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order not found!"));
         order.setStatus(status);
         return orderRepository.save(order).toResponse();
     }

@@ -17,7 +17,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public List<CustomerResponse> getAllCustomer() {
+    public List<CustomerResponse> getAllCustomer(Integer pageNo, Integer pageSize, String sortBy, String sortDirection) {
         return customerRepository.findAll().stream().map(Customer::toResponse).toList();
     }
 

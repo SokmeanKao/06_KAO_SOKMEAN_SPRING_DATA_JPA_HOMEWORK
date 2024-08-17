@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CustomerService {
 
-    List<CustomerResponse> getAllCustomer();
+    List<CustomerResponse> getAllCustomer(Integer pageNo, Integer pageSize, String sortBy, String sortDirection);
 
     CustomerResponse createCustomer(CustomerRequest customerRequest);
 
