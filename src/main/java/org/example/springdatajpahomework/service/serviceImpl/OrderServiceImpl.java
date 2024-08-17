@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRequests.stream()
                 .map(request -> {
                     Product product = productRepository.findById(request.getProductId())
-                            .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                            .orElseThrow(() -> new EntityNotFoundException("Product not found!"));
                     return new ProductOrder(null, product, null, request.getQuantity());
                 }).collect(Collectors.toList());
     }

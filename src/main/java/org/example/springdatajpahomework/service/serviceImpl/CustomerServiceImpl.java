@@ -1,5 +1,6 @@
 package org.example.springdatajpahomework.service.serviceImpl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.example.springdatajpahomework.model.dto.request.CustomerRequest;
 import org.example.springdatajpahomework.model.dto.response.CustomerResponse;
@@ -29,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse getCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow().toResponse();
+        return customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Customer not found!")).toResponse();
     }
 
     @Override
