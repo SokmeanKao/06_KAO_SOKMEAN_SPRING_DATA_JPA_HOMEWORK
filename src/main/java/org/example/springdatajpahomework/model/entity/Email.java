@@ -19,7 +19,7 @@ public class Email {
     private Long id;
     @Column(unique = true)
     private String email;
-    @OneToOne(mappedBy = "email",cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToOne(mappedBy = "email",cascade = CascadeType.ALL)
     private Customer customer;
 
     public EmailResponse toResponse(){

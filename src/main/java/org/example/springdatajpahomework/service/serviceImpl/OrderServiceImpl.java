@@ -27,56 +27,6 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
 
-//    @Override
-//    public OrderResponse createOrder(Long customerId, List<ProductOrderRequest> productOrderRequests) {
-//        System.out.println(customerId);
-//        // Retrieve the customer by customerId
-//        Customer customer = customerRepository.findById(customerId).orElseThrow(null);
-//
-//        // Create a new Order entity
-//        Order order = new Order();
-//        order.setOrderDate(LocalDateTime.now());
-//        order.setStatus(Status.PENDING); // Set the appropriate status
-//        order.setCustomer(customer);
-//
-//        // Create a list to hold the ProductOrder entities
-//        List<ProductOrder> productOrders = new ArrayList<>();
-//
-//        // Calculate the total amount
-//        float totalAmount = 0;
-//
-//        // For each ProductOrderRequest, create a ProductOrder entity
-//        for (ProductOrderRequest productOrderRequest : productOrderRequests) {
-//            // Retrieve the Product entity by productId
-//            Product product = productRepository.findById(productOrderRequest.getProductId())
-//                    .orElseThrow(() -> new RuntimeException("Product not found"));
-//
-//            // Create a new ProductOrder entity
-//            ProductOrder productOrder = new ProductOrder();
-//            productOrder.setProduct(product);
-//            productOrder.setOrder(order);
-//            productOrder.setQuantity(productOrderRequest.getQuantity());
-//
-//            // Add the ProductOrder to the list
-//            productOrders.add(productOrder);
-//
-//            // Add the price of the product to the total amount
-//            totalAmount += product.getUnitPrice() * productOrderRequest.getQuantity();
-//        }
-//
-//        // Set the total amount on the Order entity
-//        order.setTotalAmount(totalAmount);
-//
-//        // Set the ProductOrder list on the Order entity
-//        order.setProductOrderList(productOrders);
-//
-//        // Save the Order entity using the OrderRepository
-//        Order savedOrder = orderRepository.save(order);
-//
-//        // Convert the saved Order entity to an OrderResponse DTO
-//        return savedOrder.toResponse();
-//    }
-
     @Override
     public OrderResponse createOrder(Long customerId, List<OrderRequest> orderRequests) {
         Customer customer = customerRepository.findById(customerId)
